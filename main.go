@@ -12,8 +12,10 @@ import (
 func main() {
 	start := time.Now()
 
+	passphraseLen := getCommandLineArgs()
+
 	codeToWord := loadWordlist()
-	randomCodes := generateArrayOfRandomCodes(5)
+	randomCodes := generateArrayOfRandomCodes(passphraseLen)
 
 	var words []string
 
@@ -51,6 +53,26 @@ func loadWordlist() map[string]string {
 	}
 
 	return codeToWord
+}
+
+// Parses the command line arguments and returns the number of words to generate
+func getCommandLineArgs() (passphraseLen int) {
+	const defaultPassphraseLen = 6
+
+	args := os.Args[1:]
+
+	if len(args) == 0 {
+		return defaultPassphraseLen
+	}
+
+	numWords, err := strconv.Atoi(args[0])
+
+	if err != nil {
+		fmt.Println("Please provide a valid number of words to generate")
+		os.Exit(1)
+	}
+
+	return numWords
 }
 
 // Generates an array of random 6-digit codes
